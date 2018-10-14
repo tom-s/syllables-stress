@@ -2,8 +2,8 @@ const fs = require('fs')
 const splitHtml = require('split-html')
 const compact = require('lodash/compact')
 const isEmpty = require('lodash/isEmpty')
-const PATH = 'src/resources/stresses/'
-const JSON_PATH = 'src/resources/stresses/json/'
+const PATH = 'public/stresses/'
+const JSON_PATH = 'public/stresses/json/'
 
 
 let letterResult = {}
