@@ -35,9 +35,10 @@ class App extends Component {
   }
   render() {
     const { letterWords, currentWordIndex } = this.state
-    console.log("debug words", {
+    const currentWordSyllabs = get(letterWords, currentWordIndex)
+    console.log("debug currentWord", {
       currentWordIndex,
-      letterWords
+      currentWordSyllabs
     })
     return (
       <div className="App">
