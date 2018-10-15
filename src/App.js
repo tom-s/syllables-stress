@@ -3,7 +3,7 @@ import get from 'lodash/get'
 import size from 'lodash/size'
 import random from 'lodash/random'
 import axios from 'axios'
-import logo from './logo.svg'
+import Word from './Word'
 import './App.css'
 
 const loadLetterJson = letter => axios.get(`${process.env.PUBLIC_URL}/stresses/json/${letter.toUpperCase()}.json`)
@@ -35,27 +35,10 @@ class App extends Component {
   }
   render() {
     const { letterWords, currentWordIndex } = this.state
-    const currentWordSyllabs = get(letterWords, currentWordIndex)
-    console.log("debug currentWord", {
-      currentWordIndex,
-      currentWordSyllabs
-    })
+    const currentWordSyllables = get(letterWords, currentWordIndex)
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        {currentWordIndex && <Word text={currentWordIndex} syllables={currentWordSyllables} />}
       </div>
     );
   }
