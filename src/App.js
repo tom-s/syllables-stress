@@ -1,14 +1,20 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import get from 'lodash/get'
 import size from 'lodash/size'
 import random from 'lodash/random'
 import axios from 'axios'
 import Word from './Word'
+import Speech from 'speak-tts'
 import './App.css'
 
 const loadLetterJson = letter => axios.get(`${process.env.PUBLIC_URL}/stresses/json/${letter.toUpperCase()}.json`)
 
-const pickRandomLetter = () => String.fromCharCode(97 + random(0, 25))
+const loadLettersJson = () => {
+  const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('')
+  return Promise.all(alphabet.map(letter => loadLetterJson(letter) ))
+}
+
+//const pickRandomLetter = () => String.fromCharCode(97 + random(0, 25))
 
 const pickRandomWordIndex = words => {
   const wordsIndexes = Object.keys(words)
@@ -17,20 +23,34 @@ const pickRandomWordIndex = words => {
   return get(wordsIndexes, index)
 }
 
+const speech = new Speech() 
+speech.setLanguage('en-GB')
+
 class App extends Component {
   state = {
+    ttsReady: false,
     letterWords:{},
     currentWordIndex: null
   }
   componentDidMount = () => {
-    loadLetterJson(pickRandomLetter()).then(res => {
-      const letterWords = get(res, 'data', {})
+    speech.init().then(() => {
+      this.setState({
+        ttsReady: true
+      })
+    })
+    loadLettersJson().then(results => {
+      const letterWords = results.reduce((memo, res) => {
+        return {
+          ...memo,
+          ...get(res, 'data', {})
+        }
+      }, {})
       this.setState({
         letterWords,
         currentWordIndex: pickRandomWordIndex(letterWords)
       })
     }).catch(e => {
-      console.log("debug e", e)
+      console.log("an error occured:", e)
     })
   }
   render() {
@@ -38,9 +58,28 @@ class App extends Component {
     const currentWordSyllables = get(letterWords, currentWordIndex)
     return (
       <div className="App">
-        {currentWordIndex && <Word text={currentWordIndex} syllables={currentWordSyllables} />}
+        {currentWordIndex
+          ? <Fragment>
+              <Word speak={this.speak} key={currentWordIndex} text={currentWordIndex} syllables={currentWordSyllables} onNext={this.next} />
+            </Fragment>
+          : <div className="Loading">Loading</div>
+        }
       </div>
-    );
+    )
+  }
+
+  speak = (text) => {
+    const { ttsReady } = this.state
+    ttsReady && speech.speak({
+      text
+    })
+  }
+
+  next = () => {
+    const { letterWords } = this.state
+    this.setState({
+      currentWordIndex: pickRandomWordIndex(letterWords)
+    })
   }
 }
 

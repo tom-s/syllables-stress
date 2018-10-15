@@ -1,7 +1,22 @@
 .App {
-  text-align: center;
-  padding-top: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  width: 100%;
+  position: absolute;
+  flex-direction: column;
 }
+
+.Word {
+  height: 200px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Syllables {}
 
 .Syllable {
   font-size: 60px;
@@ -18,4 +33,27 @@
 
 .Syllable-incorrect {
   background-color: red;
+}
+
+.Success {
+  text-align: center;
+  font-size: 30px;
+  margin-top: 20px;
+}
+
+.Skip {
+  margin-top: 20px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.Skip:hover {
+  text-decoration: underline;
+}
+
+.Tts_speak {
+  width: 150px;
+  height: 30px;
+  margin-top: 20px;
+  cursor: pointer;
 }
