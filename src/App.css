@@ -57,8 +57,11 @@
 }
 
 .Tts_speak {
-  width: 150px;
-  height: 30px;
   margin-top: 20px;
   cursor: pointer;
+}
+
+.Tts_speak_ear {
+  width: 50px;
+  height: 50px;
 }

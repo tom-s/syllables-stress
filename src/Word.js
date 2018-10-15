@@ -1,12 +1,12 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 
 
 class Tts extends Component {
   render() {
     const { onClick } = this.props
-    return <Fragment>
-      <button className="Tts_speak" onClick={onClick}>HEAR</button>
-    </Fragment>
+    return <div className="Tts_speak" onClick={onClick}>
+      <img className="Tts_speak_ear" alt="hear" src={`${process.env.PUBLIC_URL}/ear.svg`} />
+    </div>
   }
 }
 
