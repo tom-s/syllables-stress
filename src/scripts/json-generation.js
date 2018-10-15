@@ -4,6 +4,7 @@ const compact = require('lodash/compact')
 const isEmpty = require('lodash/isEmpty')
 const PATH = 'public/stresses/'
 const JSON_PATH = 'public/stresses/json/'
+const REGEX = /<\/{0,1}[0-2]>/gi
 
 
 let letterResult = {}
@@ -17,9 +18,9 @@ const DEBUG_START = 45220 //letter H
 
 for (var i = 0; i < splitList.length; i++) {
 //for (var i = DEBUG_START; i < DEBUG_START + 10; i++) { //for debug
-  const line = splitList[i].split(' 	')
-  const word = line[0]
-  const stresses = line[1]
+  const line = splitList[i]
+  const word = line.replace(REGEX, '')
+  const stresses = line
   const firstLetter = word.charAt(0)
   if(currentLetter && firstLetter !== currentLetter && !isEmpty(letterResult)) {
     // Write previous file
@@ -27,13 +28,14 @@ for (var i = 0; i < splitList.length; i++) {
     fs.writeFileSync(`${JSON_PATH}${currentLetter}.json`, fileLetterContent)
     letterResult = {}
   }
-  const fragments = compact(splitHtml(stresses, 'b').filter(frag => frag !== '<b></b>'))
+  const fragments = compact(splitHtml(stresses, '0,1,2').filter(frag => frag !== '<0></0>' && frag !== '<1></1>' && frag !== '<2></2>'))
    // Only add words with several syllables
    if(fragments.length > 1) {
     const stressesArray = fragments.map(frag => {
       return {
-        syllable: frag.replace('<b>', '').replace('</b>', ''),
-        primaryStress: frag.includes('<b>') || fragments.length === 1
+        syllable: frag.replace(REGEX, ''),
+        primaryStress: frag.includes('<1>') || fragments.length === 1,
+        secondaryStress: frag.includes('<2>')
       }
     })
     currentLetter = firstLetter
