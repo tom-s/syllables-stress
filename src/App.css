@@ -8,6 +8,10 @@
   flex-direction: column;
 }
 
+.Instructions {
+  margin-bottom: 50px;
+}
+
 .Word {
   height: 200px;
   width: 100%;
@@ -28,17 +32,18 @@
 }
 
 .Syllable-correct {
-  background-color: green;
+  background-color: #8cff66;
 }
 
 .Syllable-incorrect {
-  background-color: red;
+  background-color:#ff3333;
 }
 
 .Success {
   text-align: center;
   font-size: 30px;
   margin-top: 20px;
+  cursor: pointer;
 }
 
 .Skip {

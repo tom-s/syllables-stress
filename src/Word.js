@@ -34,13 +34,13 @@ class Word extends Component {
     success: false
   }
   onCorrect = () => {
-    const { onNext } = this.props
     this.setState({
       success: true
     })
-    window.setTimeout(() => {
-      onNext()
-    }, 2000)
+  }
+  next = () => {
+    const { onNext } = this.props
+    onNext()
   }
   speak = () => {
     const { text, speak } = this.props
@@ -55,7 +55,7 @@ class Word extends Component {
           {syllables.map((syllable, i) => <Syllable key={i} syllable={syllable} onCorrect={this.onCorrect} />)}
         </div>
         <Tts onClick={this.speak} />
-        {success && <div className="Success">Congratulations !</div>}
+        {success && <div className="Success" onClick={this.next}>Congratulations ! Click to carry on</div>}
         {!success && <div className="Skip" onClick={onNext}>Skip</div>}
       </div>
     )

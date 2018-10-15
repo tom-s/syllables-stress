@@ -60,6 +60,7 @@ class App extends Component {
       <div className="App">
         {currentWordIndex
           ? <Fragment>
+              <div className="Instructions">Click on the primary stressed syllable</div>
               <Word speak={this.speak} key={currentWordIndex} text={currentWordIndex} syllables={currentWordSyllables} onNext={this.next} />
             </Fragment>
           : <div className="Loading">Loading</div>
@@ -71,7 +72,8 @@ class App extends Component {
   speak = (text) => {
     const { ttsReady } = this.state
     ttsReady && speech.speak({
-      text
+      text,
+      queue: false
     })
   }
 
