@@ -41,7 +41,7 @@ const initSpeechEvents = ({stream, onSpeaking = () => {}, onStoppedSpeaking = ()
   // Try hark
   const options = {
     interval: debounce,
-    //play: true // true: allow to hear the result for debug
+    play: true // true: allow to hear the result for debug
   }
   const speechEvents = hark(stream, options)
 
@@ -52,18 +52,14 @@ const initSpeechEvents = ({stream, onSpeaking = () => {}, onStoppedSpeaking = ()
   return speechEvents
 }
 
-class Recorder extends Component {
+class Recorder {
   worker = null
   recorder = null
   speechEvent = null
   recordStart = null
   audioStream = null
 
-  componentDidMount() {
-    this.init(this.props)
-  }
-
-  componentWillUnmount() {
+  stop() {
     if (this.audioStream.getTracks) {
       const tracks = this.audioStream.getTracks()
       tracks.forEach(track => track.stop())
@@ -75,25 +71,23 @@ class Recorder extends Component {
   }
 
   init = props => {
-    const { debounce = 200, onNotAvailable = () => {}, onError = () => {}, onVolumeChange = () => {}, onRecordComplete = () => {}}  = props
-    if(!this.audioContext) {
-      return onNotAvailable()
-    }
-
-    window.navigator.mediaDevices.getUserMedia({audio: true})
-      .then((stream) => {
-        this.initStream({
-          stream,
-          onError,
-          onVolumeChange,
-          onRecordComplete,
-          debounce
+    const { debounce = 200, onVolumeChange = () => {}, onRecordComplete = () => {}}  = props
+    return new Promise((resolve, reject) => {
+      getUserMedia({audio: true})
+        .then((stream) => {
+          this.initStream({
+            stream,
+            onError,
+            onVolumeChange,
+            onRecordComplete,
+            debounce
+          })
+          resolve()
+        })
+        .catch(err => {
+          reject(err)
         })
       })
-      .catch(err => {
-        onNotAvailable(err)
-      })
-
   }
 
   initStream = ({ stream, onError, onVolumeChange, onRecordComplete, debounce }) => {
@@ -112,7 +106,7 @@ class Recorder extends Component {
     // Init recorder
     this.recorder = initRecorder({
       stream,
-      audioContext: this.audioContext,
+      audioContext,
       onAudioProcess: (e) => {
         const inputBuffer = []
         for (var channel = 0; channel < e.inputBuffer.numberOfChannels; channel++) {
@@ -142,10 +136,6 @@ class Recorder extends Component {
       debounce
     })
 
-  }
-
-  render() {
-    return null
   }
 }
 
