@@ -11,14 +11,16 @@ class Session extends Component {
   state = {
     ttsReady: false,
     prevPropsWords: null,
-    currentWordIndex: null
+    currentWordIndex: null,
+    history: []
   }
 
   static getDerivedStateFromProps(props, state) {
     return (props.words !== state.prevPropsWords)
       ? {
         prevPropsWords: props.words,
-        currentWordIndex: 0
+        currentWordIndex: 0,
+        history: []
       } : null
   }
 
@@ -34,12 +36,12 @@ class Session extends Component {
 
   render() {
     const { words } = this.props
-    const { currentWordIndex } = this.state
+    const { currentWordIndex, history } = this.state
     const currentWord = get(words, currentWordIndex)
     return (
       <div className="Session">
         <div className="Left_panel">
-          <WordsList currentWordIndex={currentWordIndex} words={words} />
+          <WordsList history={history} currentWordIndex={currentWordIndex} words={words} />
         </div>
         <div className="Main_panel">
           <div className="Instructions">Click on the primary stressed syllable</div>
@@ -57,9 +59,13 @@ class Session extends Component {
     })
   }
 
-  next = () => {
+  next = (data) => {
     this.setState(prevState => ({
-      currentWordIndex: prevState.currentWordIndex + 1
+      currentWordIndex: prevState.currentWordIndex + 1,
+      history: [
+        ...prevState.history,
+        {wordIndex: prevState.currentWordIndex, ...data}
+      ]
     }))
   }
 }

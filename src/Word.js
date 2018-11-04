@@ -12,51 +12,65 @@ class Tts extends Component {
 
 class Syllable extends Component {
   state = {
-    correct: null
+    isCorrect: null
   }
   render() {
     const { syllable } = this.props
-    const { correct } = this.state
-    return <span className={`Syllable ${correct === true ? 'Syllable-correct':''} ${correct === false ? 'Syllable-incorrect':''}`} dangerouslySetInnerHTML={{__html: syllable.syllable}} onClick={this.onClick} />
+    const { isCorrect } = this.state
+    return <span className={`Syllable ${isCorrect === true ? 'Syllable-correct':''} ${isCorrect === false ? 'Syllable-incorrect':''}`} dangerouslySetInnerHTML={{__html: syllable.syllable}} onClick={this.onClick} />
   }
   onClick = () => {
-    const { syllable, onCorrect } = this.props
-    const correct = syllable.primaryStress
+    const { syllable, onClick } = this.props
+    const isCorrect = syllable.primaryStress
     this.setState({
-      correct
+      isCorrect
     })
-    correct && onCorrect()
+    onClick && onClick(isCorrect)
   }
 }
 
 class Word extends Component {
   state = {
-    success: false
+    isCorrect: false,
+    errorsCount: 0
   }
-  onCorrect = () => {
-    this.setState({
-      success: true
+
+  onClick = isCorrect => {
+    this.setState(prevState => ({
+      isCorrect,
+      errorsCount: isCorrect
+        ? prevState.errorsCount
+        : prevState.errorsCount + 1
+    }))
+  }
+
+  onNext = (e, skipped = false) => {
+    const { onNext } = this.props
+    const { isCorrect, errorsCount } = this.state
+    onNext && onNext({
+      skipped,
+      isCorrect,
+      errorsCount
     })
   }
-  next = () => {
-    const { onNext } = this.props
-    onNext()
+  onSkip = () => {
+    this.onNext(null, true)
   }
   speak = () => {
     const { word, speak } = this.props
     speak(word.text)
   }
   render() {
-    const { word, onNext } = this.props
-    const { success } = this.state
+    const { word } = this.props
+    const { isCorrect } = this.state
     return (
       <div className="Word">
         <div className="Syllables">
-          {word.syllables.map((syllable, i) => <Syllable key={i} syllable={syllable} onCorrect={this.onCorrect} />)}
+          {word.syllables.map((syllable, i) => <Syllable key={i} syllable={syllable} onClick={this.onClick} />)}
         </div>
         <Tts onClick={this.speak} />
-        {success && <div className="Success" onClick={this.next}>Congratulations ! Click to carry on</div>}
-        {!success && <div className="Skip" onClick={onNext}>Skip</div>}
+        {isCorrect && <div className="Success" onClick={this.onNext}>Congratulations ! Click to carry on</div>}
+        {!isCorrect && <div className="Skip" onClick={this.onSkip}>Skip</div>}
       </div>
     )
   }

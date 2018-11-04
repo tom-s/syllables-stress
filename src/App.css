@@ -9,6 +9,21 @@
   height: 100%;
 }
 
+.Wordslist {
+  list-style-type: none;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+.Wordslist .Wordlist_word {
+  font-size: 16px;
+}
+
+.Wordslist .Wordlist_word-current {
+  font-size: 36px;
+}
+
 .Session {
   display: flex;
   position: absolute;
