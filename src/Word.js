@@ -43,16 +43,16 @@ class Word extends Component {
     onNext()
   }
   speak = () => {
-    const { text, speak } = this.props
-    speak(text)
+    const { word, speak } = this.props
+    speak(word.text)
   }
   render() {
-    const { syllables, onNext } = this.props
+    const { word, onNext } = this.props
     const { success } = this.state
     return (
       <div className="Word">
         <div className="Syllables">
-          {syllables.map((syllable, i) => <Syllable key={i} syllable={syllable} onCorrect={this.onCorrect} />)}
+          {word.syllables.map((syllable, i) => <Syllable key={i} syllable={syllable} onCorrect={this.onCorrect} />)}
         </div>
         <Tts onClick={this.speak} />
         {success && <div className="Success" onClick={this.next}>Congratulations ! Click to carry on</div>}
