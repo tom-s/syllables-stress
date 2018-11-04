@@ -36,7 +36,7 @@ class Session extends Component {
 
   render() {
     const { words } = this.props
-    const { currentWordIndex, history } = this.state
+    const { currentWordIndex, history, ttsReady } = this.state
     const currentWord = get(words, currentWordIndex)
     return (
       <div className="Session">
