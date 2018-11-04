@@ -8,7 +8,8 @@ import './App.css'
 const loadLetterJson = letter => axios.get(`${process.env.PUBLIC_URL}/stresses/json/${letter.toUpperCase()}.json`)
 
 const loadLettersJson = () => {
-  const alphabet = ['z']//, 'b'] //'abcdefghijklmnopqrstuvwxyz'.split('')
+  const alphabet =  'abcde'.split('')
+  //const alphabet =  'abcdefghijklmnopqrstuvwxyz'.split('')
   return Promise.all(alphabet.map(letter => loadLetterJson(letter) ))
 }
 
@@ -39,10 +40,11 @@ class App extends Component {
   }
   render() {
     const { words } = this.state
+
     return (
       <div className="App">
         {isEmpty(words)
-          ? <div className="Loading">Loading</div>
+          ?  <div className="Loading">Loading</div>
           : <Session words={words} />
         }
       </div>

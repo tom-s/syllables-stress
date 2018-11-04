@@ -1,15 +1,8 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import get from 'lodash/get'
-import size from 'lodash/size'
-import random from 'lodash/random'
 import Word from './Word'
+import WordsList from './WordsList'
 import Speech from 'speak-tts'
-
-const pickRandomWordIndex = words => {
-  const wordsIndexes = size(words)
-  const max = size(wordsIndexes) - 1
-  return random(0, max)
-}
 
 const speech = new Speech()
 speech.setLanguage('en-GB')
@@ -25,7 +18,7 @@ class Session extends Component {
     return (props.words !== state.prevPropsWords)
       ? {
         prevPropsWords: props.words,
-        currentWordIndex: pickRandomWordIndex(props.words)
+        currentWordIndex: 0
       } : null
   }
 
@@ -43,13 +36,15 @@ class Session extends Component {
     const { words } = this.props
     const { currentWordIndex } = this.state
     const currentWord = get(words, currentWordIndex)
-    console.log("debug currentWord", currentWord)
     return (
-      <div className="App">
-        {currentWord && <Fragment>
+      <div className="Session">
+        <div className="Left_panel">
+          <WordsList currentWordIndex={currentWordIndex} words={words} />
+        </div>
+        <div className="Main_panel">
           <div className="Instructions">Click on the primary stressed syllable</div>
           <Word speak={this.speak} key={currentWord.text} word={currentWord} onNext={this.next} />
-        </Fragment>}
+        </div>
       </div>
     )
   }
@@ -63,10 +58,9 @@ class Session extends Component {
   }
 
   next = () => {
-    const { words } = this.props
-    this.setState({
-      currentWordIndex: pickRandomWordIndex(words)
-    })
+    this.setState(prevState => ({
+      currentWordIndex: prevState.currentWordIndex + 1
+    }))
   }
 }
 
