@@ -5,6 +5,10 @@ import axios from 'axios'
 import Session from './Session'
 import './App.css'
 
+const MODES = {
+  STRESSES: 'stresses'
+}
+
 const loadLetterJson = letter => axios.get(`${process.env.PUBLIC_URL}/stresses/json/${letter.toUpperCase()}.json`)
 
 const loadLettersJson = () => {
@@ -15,7 +19,8 @@ const loadLettersJson = () => {
 
 class App extends Component {
   state = {
-    words:[]
+    words:[],
+    mode: null
   }
   componentDidMount = () => {
     loadLettersJson().then(results => {
@@ -39,17 +44,27 @@ class App extends Component {
     })
   }
   render() {
-    const { words } = this.state
-
+    const { words, mode } = this.state
+    console.log("debug mode", mode)
     return (
       <div className="App">
         {isEmpty(words)
           ?  <div className="Loading">Loading</div>
-          : <Session words={words} />
+          : <div>
+              <div className="Options">
+                <button onClick={() => this.setState({ mode: MODES.STRESSES })}>
+                  Session stresses
+                </button>
+                <button onClick={() => this.setState({ mode: null })}>
+                  Autre
+                </button>
+              </div>
+              {mode === MODES.STRESSES && <Session words={words} />}
+            </div>
         }
       </div>
     )
   }
 }
 
-export default App;
+export default App
