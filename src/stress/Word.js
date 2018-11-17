@@ -57,7 +57,9 @@ class Word extends Component {
         <Tts onClick={this.speak} />
         {success && <div className="Success" onClick={this.next}>Congratulations ! Click to carry on</div>}
         {!success && <div className="Skip" onClick={onNext}>Skip</div>}
-        <Recorder />
+        <div style={{ width: '50%', position: 'relative'}}>
+          <Recorder />
+        </div>
       </div>
     )
   }
