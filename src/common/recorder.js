@@ -77,7 +77,6 @@ class Recorder {
         .then((stream) => {
           this.initStream({
             stream,
-            onError,
             onVolumeChange,
             onRecordComplete,
             debounce
