@@ -24,7 +24,7 @@ const loadLettersJson = () => {
 
 class App extends Component {
   state = {
-    currentExercise: 'stress',
+    currentExercise: 'repeat',
     words: {}
   }
   componentDidMount = () => {
@@ -45,7 +45,6 @@ class App extends Component {
   render() {
     const { currentExercise, words } = this.state
     const Exercise = EXERCISES_TYPES[currentExercise].Component
-    console.log("debug words", words)
     return (
       <div className="App">
         <div className="Exercise_types">
