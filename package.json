@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@babel/core": "7.1.0",
-    "@lls/lls-audio": "0.0.121",
+    "@lls/lls-audio": "^0.0.137",
     "@lls/lls-icons": "^2.1.1",
     "@svgr/webpack": "2.4.1",
     "audio-context": "^1.0.3",

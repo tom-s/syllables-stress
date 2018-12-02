@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Recorder from '@lls/lls-audio/lab/recorderWithPlayer'
+import Recorder from '@lls/lls-audio/lab/recorder'
 
 class Tts extends Component {
   render() {
@@ -57,8 +57,8 @@ class Word extends Component {
         <Tts onClick={this.speak} />
         {success && <div className="Success" onClick={this.next}>Congratulations ! Click to carry on</div>}
         {!success && <div className="Skip" onClick={onNext}>Skip</div>}
-        <div style={{ width: '50%', position: 'relative'}}>
-          <Recorder />
+        <div style={{ width: 180, position: 'relative', textAlign: 'center'}}>
+          <Recorder inline={true} />
         </div>
       </div>
     )
